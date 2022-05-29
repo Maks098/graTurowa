@@ -9,160 +9,171 @@ int Creature::attack(Creature &enemy) {
         case 1:
             switch (enemy.type) {
                 case 1:
-                    notEffectiveAttack(enemy.hitPoints);
+                    notEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 2:
-                    superEffectiveAttack(enemy.hitPoints);
+                    superEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 3:
-                    normalAttack(enemy.hitPoints);
+                    normalAttack(enemy.currentHitPoints);
                     break;
                 case 4:
-                    superEffectiveAttack(enemy.hitPoints);
+                    superEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 5:
-                    normalAttack(enemy.hitPoints);
+                    normalAttack(enemy.currentHitPoints);
                     break;
                 case 6:
-                    normalAttack(enemy.hitPoints);
+                    normalAttack(enemy.currentHitPoints);
                     break;
             }
             break;
         case 2:
             switch (enemy.type){
                 case 1:
-                    normalAttack(enemy.hitPoints);
+                    normalAttack(enemy.currentHitPoints);
                     break;
                 case 2:
-                    normalAttack(enemy.hitPoints);
+                    normalAttack(enemy.currentHitPoints);
                     break;
                 case 3:
-                    notEffectiveAttack(enemy.hitPoints);
+                    notEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 4:
-                    superEffectiveAttack(enemy.hitPoints);
+                    superEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 5:
-                    superEffectiveAttack(enemy.hitPoints);
+                    superEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 6:
-                    superEffectiveAttack(enemy.hitPoints);
+                    superEffectiveAttack(enemy.currentHitPoints);
                     break;
             }
-                break;
+            break;
         case 3:
             switch (enemy.type){
                 case 1:
-                    normalAttack(enemy.hitPoints);
+                    normalAttack(enemy.currentHitPoints);
                     break;
                 case 2:
-                    notEffectiveAttack(enemy.hitPoints);
+                    notEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 3:
-                    normalAttack(enemy.hitPoints);
+                    normalAttack(enemy.currentHitPoints);
                     break;
                 case 4:
-                    normalAttack(enemy.hitPoints);
+                    normalAttack(enemy.currentHitPoints);
                     break;
                 case 5:
-                    superEffectiveAttack(enemy.hitPoints);
+                    superEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 6:
-                    notEffectiveAttack(enemy.hitPoints);
+                    notEffectiveAttack(enemy.currentHitPoints);
                     break;
             }
             break;
         case 4:
             switch (enemy.type) {
                 case 1:
-                    notEffectiveAttack(enemy.hitPoints);
+                    notEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 2:
-                    notEffectiveAttack(enemy.hitPoints);
+                    notEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 3:
-                    normalAttack(enemy.hitPoints);
+                    normalAttack(enemy.currentHitPoints);
                     break;
                 case 4:
-                    normalAttack(enemy.hitPoints);
+                    normalAttack(enemy.currentHitPoints);
                     break;
                 case 5:
-                    superEffectiveAttack(enemy.hitPoints);
+                    superEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 6:
-                    superEffectiveAttack(enemy.hitPoints);
+                    superEffectiveAttack(enemy.currentHitPoints);
                     break;
             }
             break;
         case 5:
             switch (enemy.type) {
                 case 1:
-                    notEffectiveAttack(enemy.hitPoints);
+                    notEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 2:
-                    superEffectiveAttack(enemy.hitPoints);
+                    superEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 3:
-                    normalAttack(enemy.hitPoints);
+                    normalAttack(enemy.currentHitPoints);
                     break;
                 case 4:
-                    notEffectiveAttack(enemy.hitPoints);
+                    notEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 5:
-                    notEffectiveAttack(enemy.hitPoints);
+                    notEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 6:
-                    normalAttack(enemy.hitPoints);
+                    normalAttack(enemy.currentHitPoints);
                     break;
             }
             break;
         case 6:
             switch (enemy.type) {
                 case 1:
-                    superEffectiveAttack(enemy.hitPoints);
+                    superEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 2:
-                    normalAttack(enemy.hitPoints);
+                    normalAttack(enemy.currentHitPoints);
                     break;
                 case 3:
-                    superEffectiveAttack(enemy.hitPoints);
+                    superEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 4:
-                    notEffectiveAttack(enemy.hitPoints);
+                    notEffectiveAttack(enemy.currentHitPoints);
                     break;
                 case 5:
-                    normalAttack(enemy.hitPoints);
+                    normalAttack( enemy.currentHitPoints);
                     break;
                 case 6:
-                    notEffectiveAttack(enemy.hitPoints);
+                    notEffectiveAttack(enemy.currentHitPoints);
                     break;
             }
             break;
-
-            return 0;
-
     }
-}
-
-int Creature::useUltimate() {
-    std::cout << "R";
-
+    Creature::specialAttackStack++;
+    if(Creature::specialAttackStack>=3)
+    {
+        specialAttackStack=3;
+    }
     return 0;
 }
 
-int Creature::evolve() {
+int Creature::useUltimate(Creature& enemy) {
+    if(Creature::specialAttackStack==3) {
+        Creature::attack(enemy);
+        Creature::attack(enemy);
+        Creature::specialAttackStack = 0;
+    }else{
+        std::cout<<"Twoje stworzenie nie ma wystarczajaco ladunkow aby uzyc superumiejetnosci" << std::endl;
+    }
+    return 0;
+}
+
+int Creature::evolve(Creature& evolvoingCreature) {
     std::cout << "evolucja";
     return 0;
 }
 
-Creature::Creature( char *name, int strength, int agility, int hitPoints, int ultimate, int expPoints, int type) {
+Creature::Creature( char *name, int strength, int agility, int maxHitPoints, int expPoints, int type) {
     Creature::name = name;
     Creature::strength = strength;
     Creature::agility = agility;
-    Creature::hitPoints = hitPoints;
-    Creature::ultimate = ultimate;
+    Creature::maxHitPoints = maxHitPoints;
+    Creature::currentHitPoints = maxHitPoints;
     Creature::expPoints = expPoints;
     Creature::type = type;
+    Creature::level = 1;
+    Creature::currentExp = 0;
+    Creature::specialAttackStack=0;
 }
 
 int Creature::superEffectiveAttack(int &enemyHP) {
@@ -179,5 +190,4 @@ int Creature::normalAttack(int &enemyHP) {
     enemyHP = enemyHP - Creature::strength;
     return 0;
 }
-
 

@@ -8,18 +8,21 @@
 
 class Creature {
 public:
-    Creature(char *name, int strength, int agility, int hitPoints, int ultimate, int expPoints, int type);
+    Creature(char *name, int strength, int agility, int maxHitPoints, int expPoints, int type);
     char* name;
     int strength;
     int agility;
-    int hitPoints;
-    int ultimate;
+    int maxHitPoints;
+    int currentHitPoints;
     int expPoints;
     /*1=woda,2=ziemia,3=powietrze,4=ogień,5=lód,6=stal*/
     int type;
+    int level;
+    int currentExp;
+    int specialAttackStack;
     int attack(Creature& enemy);
-    int useUltimate();
-    int evolve();
+    int useUltimate(Creature& enemy);
+    int evolve(Creature& evolvoingCreature);
     int superEffectiveAttack(int& enemyHP);
     int notEffectiveAttack(int& enemyHP);
     int normalAttack(int& enemyHP);
