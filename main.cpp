@@ -39,7 +39,7 @@ void showCreatureListWithHitPoints(std::vector<Creature> playerTeam) {
                   " Maksymalna ilosc punktow zdrowia: " << playerTeam.at(i).maxHitPoints <<
                   " Obecna ilosc punktow zdrowia: " << playerTeam.at(i).currentHitPoints;
         if (playerTeam.at(i).currentHitPoints == 0) {
-            std::cout << " Omdlałe ";
+            std::cout << " Omdlale ";
         }
         std::cout << " Punkty sily: " << playerTeam.at(i).strength <<
                   " Punkty zwinnosci: " << playerTeam.at(i).agility <<
@@ -152,11 +152,13 @@ void fight(std::vector<Creature> playerTeam, std::vector<Creature> enemyTeam) {
             checkingIfWon(chosenToFight, fightOn, playerTeam);
         }
         if (chosenToFight.currentHitPoints <= 0) {
+            playerTeam.erase(playerTeam.begin()+creatureChooseToFight);
+            playerTeam.insert(playerTeam.begin()+creatureChooseToFight,chosenToFight);
             std::cout << "Twoje stworzenie zostalo pokonane, musisz wybrac inne" << std::endl;
             while (changeFaintedCreatureOn) {
                 showCreatureListWithHitPoints(playerTeam);
                 std::cin >> changeFaintedCreature;
-                if (playerTeam.at(changeFaintedCreature).currentHitPoints <= 0) {
+                if (playerTeam.at(changeFaintedCreature-1).currentHitPoints == 0) {
                     std::cout << "Nie mozesz wybrac tego stworzenia. Jest ono niezdolne do walki" << std::endl;
                 } else
                     chosenToFight = playerTeam.at(changeFaintedCreature);
