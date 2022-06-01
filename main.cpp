@@ -67,17 +67,15 @@ void showCreatureListWithHitPoints(std::vector<Creature> playerTeam) {
     }
 }
 
-bool checkingIfWon(Creature &creature, bool &on, std::vector<Creature> team) {
+void checkingIfWon(Creature &creature, bool &on, std::vector<Creature> team) {
     if (creature.currentHitPoints <= 0) {
         std::cout << "Stworzenie " << creature.name << " zemdlalo!" << std::endl;
         if (team.size() == 0) {
             //1
             // on = false;
             std::cout << "Przeciwnik zostal pokonany";
-            return true;
         }
-    } else
-        return false;
+    }
 }
 
 void fight(std::vector<Creature> playerTeam, std::vector<Creature> enemyTeam) {
@@ -88,7 +86,8 @@ void fight(std::vector<Creature> playerTeam, std::vector<Creature> enemyTeam) {
               "Wybierz stworzenie, ktore wystawisz do walki:" << std::endl;
     std::cin >> creatureChooseToFight;
     Creature chosenToFight = playerTeam.at(creatureChooseToFight - 1);
-    int randomEnemyCreature = std::rand() % enemyTeam.size();
+    int randomEnemyCreature = std::rand() % enemyTeam.size() - 1;
+    std::cout << "Dziala1" << std::endl;
     Creature chosenEnemyToFight = enemyTeam.at(randomEnemyCreature);
     std::cout << "Przeciwnik wybral " << chosenEnemyToFight.name << std::endl;
     bool fightOn = true;
@@ -106,6 +105,7 @@ void fight(std::vector<Creature> playerTeam, std::vector<Creature> enemyTeam) {
                   "2. Wykonaj ruch specjalny(" << chosenToFight.specialAttackStack << "/3)" << std::endl <<
                   "3. Ewoluuj(" << chosenToFight.currentExp << "/" << chosenToFight.level * 100 << ")" << std::endl <<
                   "4. Wymien stworzenie" << std::endl;
+        showCreatureList(enemyTeam);
         std::cin >> playerAction;
         switch (playerAction) {
             case 1:
@@ -132,38 +132,51 @@ void fight(std::vector<Creature> playerTeam, std::vector<Creature> enemyTeam) {
                 }
                 break;
         }
-        checkingIfWon(chosenEnemyToFight, fightOn, enemyTeam);
+        //checkingIfWon(chosenEnemyToFight, fightOn, enemyTeam);
         if (enemyTeam.size() == 0) {
             std::cout << "Przeciwnik zostal pokonany";
-        }
-        if (chosenEnemyToFight.currentHitPoints <= 0) {
-            enemyFaintedCreatures.push_back(enemyTeam.at(randomEnemyCreature));
-            enemyTeam.erase(enemyTeam.begin() + randomEnemyCreature);
-            randomEnemyCreature = std::rand() % (enemyTeam.size() - enemyFaintedCreatures.size());
-            chosenEnemyToFight = enemyTeam.at(randomEnemyCreature);
-            std::cout << "Przeciwnik wystawil " << chosenEnemyToFight.name << std::endl;
-        } else if (fightOn) {
-            if (chosenEnemyToFight.specialAttackStack == 3) {
-                chosenEnemyToFight.useUltimate(chosenToFight);
+        } else {
+            if (chosenEnemyToFight.currentHitPoints <= 0) {
+                enemyFaintedCreatures.push_back(enemyTeam.at(randomEnemyCreature));
+                enemyTeam.erase(enemyTeam.begin() + randomEnemyCreature);
+                if (enemyTeam.size() == 0) {
+                    std::cout << "Przeciwnik zostal pokonany ez" << std::endl;
+                    fightOn = false;
+                } else if (enemyTeam.size() == 1) {
+                    randomEnemyCreature = 0;
+                } else {
+                    randomEnemyCreature = std::rand() % (enemyTeam.size() - 1);
+                }
+                chosenEnemyToFight = enemyTeam.at(randomEnemyCreature);
+                std::cout << "Przeciwnik wystawil " << chosenEnemyToFight.name << std::endl;
 
-            } else {
-                chosenEnemyToFight.attack(chosenToFight);
+            } else if (fightOn) {
+                if (chosenEnemyToFight.specialAttackStack == 3) {
+                    chosenEnemyToFight.useUltimate(chosenToFight);
+
+                } else {
+                    chosenEnemyToFight.attack(chosenToFight);
+                }
+                //checkingIfWon(chosenToFight, fightOn, playerTeam);
             }
-            checkingIfWon(chosenToFight, fightOn, playerTeam);
-        }
-        if (chosenToFight.currentHitPoints <= 0) {
-            playerTeam.erase(playerTeam.begin()+creatureChooseToFight);
-            playerTeam.insert(playerTeam.begin()+creatureChooseToFight,chosenToFight);
-            std::cout << "Twoje stworzenie zostalo pokonane, musisz wybrac inne" << std::endl;
-            while (changeFaintedCreatureOn) {
+            if (chosenToFight.currentHitPoints <= 0) {
+                playerTeam.erase(playerTeam.begin() + creatureChooseToFight - 1);
+                playerTeam.insert(playerTeam.begin() + creatureChooseToFight - 1, chosenToFight);
                 showCreatureListWithHitPoints(playerTeam);
-                std::cin >> changeFaintedCreature;
-                if (playerTeam.at(changeFaintedCreature-1).currentHitPoints == 0) {
-                    std::cout << "Nie mozesz wybrac tego stworzenia. Jest ono niezdolne do walki" << std::endl;
-                } else
-                    chosenToFight = playerTeam.at(changeFaintedCreature);
-                changeFaintedCreatureOn = false;
+                std::cout << "Twoje stworzenie zostalo pokonane, musisz wybrac inne" << std::endl;
+                while (changeFaintedCreatureOn) {
+                    std::cin >> changeFaintedCreature;
+                    if (playerTeam.at(changeFaintedCreature - 1).currentHitPoints == 0) {
+                        std::cout << "Nie mozesz wybrac tego stworzenia. Jest ono niezdolne do walki" << std::endl;
+                    } else {
+                        chosenToFight = playerTeam.at(changeFaintedCreature);
+                        changeFaintedCreatureOn = false;
+                    }
+                }
+
             }
+            //if(enemyTeam.size()==0){
+            //  fightOn=false;
         }
     }
 }
