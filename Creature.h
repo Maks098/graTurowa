@@ -8,8 +8,8 @@
 
 class Creature {
 public:
-    Creature(char *name, int strength, int agility, int maxHitPoints, int expPoints, int type);
-    char* name;
+    Creature(std::string  name, int strength, int agility, int maxHitPoints, int expPoints, int type);
+    std::string name;
     int strength;
     int agility;
     int maxHitPoints;
@@ -22,7 +22,7 @@ public:
     int specialAttackStack;
     int attack(Creature& enemy);
     int useUltimate(Creature& enemy);
-    int evolve(Creature& evolvoingCreature);
+    int evolve();
     int superEffectiveAttack(int& enemyHP);
     int notEffectiveAttack(int& enemyHP);
     int normalAttack(int& enemyHP);
