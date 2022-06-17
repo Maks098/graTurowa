@@ -6,9 +6,11 @@
 #define UNTITLED1_CREATURE_H
 
 
+#include <vector>
+
 class Creature {
 public:
-    Creature(std::string  name, int strength, int agility, int maxHitPoints, int expPoints, int type);
+    Creature(std::string  name, int strength, int agility, int maxHitPoints, int expPoints, int type, int specialInteraction);
     std::string name;
     int strength;
     int agility;
@@ -20,12 +22,16 @@ public:
     int level;
     int currentExp;
     int specialAttackStack;
+    int specialInteraction;
     int attack(Creature& enemy);
     int useUltimate(Creature& enemy);
     int evolve();
     int superEffectiveAttack(int& enemyHP);
     int notEffectiveAttack(int& enemyHP);
     int normalAttack(int& enemyHP);
+
+    Creature(const std::string &name, int strength, int agility, int maxHitPoints, int expPoints,
+             int type, int level, int currentExp, int specialAttackStack, int specialInteraction);
 };
 
 

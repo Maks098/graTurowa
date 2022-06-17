@@ -156,7 +156,21 @@ int Creature::attack(Creature &enemy) {
 
 int Creature::useUltimate(Creature &enemy) {
     if (Creature::specialAttackStack == 3) {
-        Creature::superEffectiveAttack(enemy.currentHitPoints);
+        switch (Creature::specialInteraction) {
+            //heal
+            case 1:
+                Creature::currentHitPoints = Creature::currentHitPoints + (Creature::maxHitPoints / 3);
+                if (Creature::maxHitPoints < Creature::currentHitPoints) {
+                    Creature::currentHitPoints = Creature::maxHitPoints;
+                }
+                break;
+                //guaranteed superEffectiveAttack
+            case 2:
+                enemy.agility = enemy.agility - 100;
+                superEffectiveAttack(enemy.currentHitPoints);
+                enemy.agility = enemy.agility + 100;
+                break;
+        }
         Creature::specialAttackStack = 0;
     } else {
         std::cout << "Twoje stworzenie nie ma wystarczajaco ladunkow aby uzyc superumiejetnosci" << std::endl;
@@ -175,9 +189,7 @@ int Creature::evolve() {
                       "2. Punkty zwinnosci " << Creature::agility << std::endl <<
                       "3. Maksymalna ilosc punktow zycia: " << Creature::maxHitPoints << std::endl;
             std::cin >> upgrdChoose;
-            std::cout << "dziala1" << std::endl;
             while (upgrdOn) {
-                std::cout << "dziala2" << std::endl;
                 switch (upgrdChoose) {
                     case 1:
                         Creature::strength = (Creature::strength + 1);
@@ -188,25 +200,29 @@ int Creature::evolve() {
                         upgrdOn = false;
                         break;
                     case 3:
-                        Creature::maxHitPoints = (Creature::maxHitPoints + 1);
+                        Creature::maxHitPoints = (Creature::maxHitPoints + 2);
                         upgrdOn = false;
                         break;
                     default:
-                        std::cout << "Podano nieodpowiednie rzadanie. Wprowadz liczbe jeszcze raz";
+                        std::cout << "Podano nieodpowiednie zadanie. Wprowadz liczbe jeszcze raz";
+                        upgrdOn = false;
+                        i = i - 1;
+                        break;
                 }
             }
             if (i != 2) {
                 upgrdOn = true;
             }
         }
+        Creature::level = Creature::level + 1;
+        Creature::currentHitPoints = Creature::maxHitPoints;
     }
-    Creature::level = Creature::level + 1;
-    Creature::currentHitPoints = Creature::maxHitPoints;
     return 0;
 }
 
 
-Creature::Creature(std::string name, int strength, int agility, int maxHitPoints, int expPoints, int type) {
+Creature::Creature(std::string name, int strength, int agility, int maxHitPoints, int expPoints, int type,
+                   int specialInteraction) {
     Creature::name = name;
     Creature::strength = strength;
     Creature::agility = agility;
@@ -214,6 +230,7 @@ Creature::Creature(std::string name, int strength, int agility, int maxHitPoints
     Creature::currentHitPoints = maxHitPoints;
     Creature::expPoints = expPoints;
     Creature::type = type;
+    Creature::specialInteraction = specialInteraction;
     Creature::level = 1;
     Creature::currentExp = 0;
     Creature::specialAttackStack = 0;
@@ -233,3 +250,9 @@ int Creature::normalAttack(int &enemyHP) {
     enemyHP = enemyHP - Creature::strength;
     return 0;
 }
+
+Creature::Creature(const std::string &name, int strength, int agility, int maxHitPoints,
+                   int expPoints, int type, int level, int currentExp, int specialAttackStack, int specialInteraction)
+        : name(name), strength(strength), agility(agility), maxHitPoints(maxHitPoints), expPoints(expPoints),
+          type(type), level(level), currentExp(currentExp),
+          specialAttackStack(specialAttackStack), specialInteraction(specialInteraction) {}

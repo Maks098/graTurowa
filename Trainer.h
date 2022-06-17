@@ -15,10 +15,12 @@ public:
     void fight(Trainer enemy);
     void showCreatureList();
     void showCreatureListWithHitPoints();
-    void diffScaling(int scaling);
+    void diffScaling(double scaling);
     void resetHp();
     void changeCreatureOption(Creature& chosenToFight,int& creatureChooseToFight);
-
+    void choosingTeam(std::vector<Creature> chooseList,std::vector<Creature> creaturesToChooseFrom);
+    void saveToFile(Trainer player,Trainer enemy1,Trainer enemy2,Trainer enemy3,Trainer enemy4);
+    void loadSave(Trainer player,Trainer enemy1,Trainer enemy2,Trainer enemy3,Trainer enemy4);
 
 };
 
